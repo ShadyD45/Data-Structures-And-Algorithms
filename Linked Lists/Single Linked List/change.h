@@ -1,7 +1,3 @@
-#include<stdio.h>
-#include<malloc.h>
-#include<stdlib.h>
-
 struct node
 {
 	int info;
@@ -34,6 +30,7 @@ void CreateList(int data)
 	}
 }//End Of Create List function
 
+
 void AddAtBeg(int data)
 {
 	struct node*temp;
@@ -43,6 +40,7 @@ void AddAtBeg(int data)
 	start=temp;	
 	printf("Element %d added at beginning\n\n",data);
 }//End of Add at begining function
+
 
 void InsertAt(int data,int pos)
 {
@@ -74,8 +72,6 @@ void InsertAt(int data,int pos)
 		temp->link = ptr->link;
 		temp->info = data;
 		ptr->link = temp;
-		if(i == pos-1)
-			last = temp->link;
 		printf("Element %d added at %d position\n\n",data,pos);
 	}
 }//End of add after function
