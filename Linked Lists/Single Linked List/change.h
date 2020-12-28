@@ -34,6 +34,16 @@ void CreateList(int data)
 	}
 }//End Of Create List function
 
+void AddAtBeg(int data)
+{
+	struct node*temp;
+	temp=malloc(sizeof(struct node *));
+	temp->info=data;	
+	temp->link=start;
+	start=temp;	
+	printf("Element %d added at beginning\n\n",data);
+}//End of Add at begining function
+
 void del(int data)
 {
 	struct node *temp,*ptr;
