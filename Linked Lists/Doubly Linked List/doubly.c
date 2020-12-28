@@ -31,33 +31,33 @@ int main()
 				for(i=0;i<n;i++)
 				{
 					scanf("%d",&m);
-					create_list(m);		//calling create list function
+					CreateList(m);		
 				}
 				break;
 
 			case 2:	printf("\nEnter The Element To Add:-->");
 				scanf("%d",&m);
-				addatbeg(m);	//calling addatbeg function	
+				AddAtBeg(m);		
 				break;
 
 			case 3:	printf("\nEnter The Element To Add and Position:-->");
 				scanf("%d %d",&m,&p);
-				addafter(m,p);	//calling addafter function
+				InsertAt(m,p);	
 				break;
 
 			case 4:	printf("\nEnter element to delete:-->");
 				scanf("%d",&m);
 
-				del(m);	//calling delete function
+				del(m);	
 				break;
 
-			case 5:	display();	//calling display function 
+			case 5:	display();	
 				break;
 			
-			case 6: count();	//calling count function
+			case 6: count();	
 				break;
 
-			case 7: reverse();	//calling reverse function
+			case 7: reverse();	
 				break;
 
 			case 8: exit(1);
