@@ -70,3 +70,21 @@ void del(int data)
 	}
 	printf("Element %d not found\n",data);	
 }//End of delete function
+
+void reverse()
+{
+	struct node *prev, *ptr, *next;
+	prev = NULL;
+	ptr = start;
+	last = start;
+	while(ptr != NULL)
+	{
+		next = ptr->link;
+		ptr->link = prev;
+		prev = ptr;
+		ptr = next;
+	}
+	
+	start = prev;
+	printf("List is reversed\n\n");
+}//End of reverse
