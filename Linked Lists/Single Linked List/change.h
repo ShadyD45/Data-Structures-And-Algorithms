@@ -44,6 +44,42 @@ void AddAtBeg(int data)
 	printf("Element %d added at beginning\n\n",data);
 }//End of Add at begining function
 
+void InsertAt(int data,int pos)
+{
+	struct node *temp,*ptr;
+	int i;
+	ptr=start;
+	
+	if(ptr == NULL)
+	{
+		printf("List is empty!!\n");
+		return;
+	}
+	else if(pos == 1)
+	{
+		AddAtBeg(data);
+	}
+	else
+	{
+		for(i=1;i<pos-1;i++)
+		{
+			ptr=ptr->link;
+			if(ptr==NULL)
+			{
+				printf("Please enter less position \n");
+				return;
+			}
+		}
+		temp=malloc(sizeof(struct node *));
+		temp->link = ptr->link;
+		temp->info = data;
+		ptr->link = temp;
+		if(i == pos-1)
+			last = temp->link;
+		printf("Element %d added at %d position\n\n",data,pos);
+	}
+}//End of add after function
+
 void del(int data)
 {
 	struct node *temp,*ptr;
