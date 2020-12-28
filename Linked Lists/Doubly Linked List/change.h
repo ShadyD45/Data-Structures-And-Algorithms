@@ -1,7 +1,3 @@
-#include<stdio.h>
-#include<malloc.h>
-#include<stdlib.h>
-
 struct node
 {
 	struct node *prev;
@@ -9,13 +5,13 @@ struct node
 	struct node *next;
 }*start=NULL,*last=NULL;
 
-void CreateList(int);
+void create_list(int);
 void del(int);
-void AddAtBeg(int);
-void InsertAt(int,int);
+void addatbeg(int);
+void addafter(int,int);
 void reverse();
 
-void CreateList(int no)
+void create_list(int no)
 {
 	struct node *temp,*q;
 	
@@ -33,11 +29,11 @@ void CreateList(int no)
 	{
 		last->next=temp;
 		temp->prev=last;
-		last = temp;	
+		last = temp;
 	}
 }//End of create list
 
-void AddAtBeg(int no)
+void addatbeg(int no)
 {
 	struct node *temp;
 	temp=malloc(sizeof(struct node *));
@@ -50,7 +46,7 @@ void AddAtBeg(int no)
 	printf("\nElement %d Added at beginning\n\n",no);
 }//End of add at beginning
 
-void InsertAt(int no,int p)
+void addafter(int no,int p)
 {
 	struct node *temp,*q;
 	int i;
@@ -61,7 +57,7 @@ void InsertAt(int no,int p)
 		q=q->next;
 		if(q->next==NULL)
 		{
-			printf("\nPlease enter valid position:(\n");
+			printf("\nPlease enter valid position:(\n\n");
 			return;		
 		}
 	}
@@ -78,10 +74,10 @@ void del(int no)
 {
 	struct node *temp,*q;
 	
-	if(start->data==no)	//To delete first element 
+	if(start->data==no)
 	{
 		temp=start;
-		start=start->next; /
+		start=start->next; //first element deleted
 		start->prev=NULL;
 		free(temp);
 		printf("\nElement %d deleted\n\n",no);
@@ -114,7 +110,7 @@ void del(int no)
 		return;
 	}
 	
-	printf("\nElement %d not found\n\n",no);
+	printf("\nElement not %d found\n\n",no);
 }//End of delete
 
 void reverse()
