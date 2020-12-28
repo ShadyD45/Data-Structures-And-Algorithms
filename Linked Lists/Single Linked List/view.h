@@ -1,7 +1,3 @@
-#include<stdio.h>
-#include<malloc.h>
-#include<stdlib.h>
-
 void display();
 void count();
 void search(int);
