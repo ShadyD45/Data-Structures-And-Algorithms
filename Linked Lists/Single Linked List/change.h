@@ -4,7 +4,7 @@ struct node
 	struct node *link;
 }*start=NULL,*last=NULL;
 
-
+void SortByExchangingLinks();
 void CreateList(int);
 void AddAtBeg(int);
 void InsertAt(int,int);
