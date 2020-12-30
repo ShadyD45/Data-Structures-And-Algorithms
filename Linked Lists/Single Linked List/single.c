@@ -18,7 +18,8 @@ int main()
 		printf("6.Count\n");
 		printf("7.Reverse\n");
 		printf("8.Search\n");
-		printf("9.Quit\n");
+		printf("9.Sort List By Exchanging Links\n");
+		printf("10.Quit\n");
 		printf("Enter your choice:-->");
 		scanf("%d",&choice);
 		
@@ -74,7 +75,9 @@ int main()
 					search(m);	
 					break;
 
-			case 9: exit(1);
+			case 9: SortByExchangingLinks();
+					break;
+			case 10: exit(1);
 
 			default: printf("WRONG OPTION\n");
 				
@@ -200,9 +203,40 @@ void reverse()
 	}
 	
 	start = prev;
-	printf("List is reversed\n\n");
+	printf("\nReversed ");
+	display();
 }//End of reverse
 
+void SortByExchangingLinks()
+{
+	struct node *p,*q,*r,*s,*temp;
+	
+	for(r=p=start; p->link != NULL; r = p, p = p->link)
+	{
+		for(s=q=p->link; q!=NULL; s = q, q = q->link)
+		{
+			if(p->info > q->info)
+			{
+				temp = p->link;
+				p->link = q->link;
+				q->link = temp;
+				
+				if(q == last)
+					last = p;
+				if(p != start)
+					r->link = q;
+				s->link = p;
+				if(p == start)
+					start = q;
+				temp = p;
+				p = q;
+				q = temp;	
+			}
+		}
+	}	
+	printf("\nSorted ");
+	display();	
+}
 
 void count()
 {
@@ -255,4 +289,5 @@ void display()
 		printf("%4d",ptr->info);
 		ptr=ptr->link;
 	}
+	printf("\n");
 }//End of display function
