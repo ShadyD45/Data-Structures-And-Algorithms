@@ -113,6 +113,69 @@ struct node *insert(struct node *start, float fCof,int iEx)
 	return start;
 }
 
+struct node *AddPoly(struct node *p1, struct node *p2)
+{
+	struct node *resultPoly = NULL;
+	
+	while(p1 != NULL && p2 != NULL)
+	{
+		if(p1->iExp > p2->iExp)
+		{
+			resultPoly = insert(resultPoly, p1->fCoeff, p1->iExp);
+			p1 = p1->link;
+		}
+		else if(p2->iExp > p1->iExp)
+		{
+			resultPoly = insert(resultPoly, p2->fCoeff, p2->iExp);
+			p2 = p2->link;
+		}
+		else if(p1->iExp == p2->iExp)
+		{
+			resultPoly = insert(resultPoly, p1->fCoeff + p2->fCoeff, p1->iExp);
+			p2 = p2->link;
+			p1 = p1->link;
+		}
+	}
+	
+	/* If poly2 is finished insert terms left in poly1 */
+	while(p1 != NULL)
+	{
+		resultPoly = insert(resultPoly, p1->fCoeff, p1->iExp);
+		p1 = p1->link;
+	}
+	
+	/* If poly1 is finished insert terms left in poly2*/
+	while(p2 != NULL)
+	{
+		resultPoly = insert(resultPoly, p2->fCoeff, p2->iExp);
+		p2 = p2->link;
+	}
+	
+	return resultPoly;
+}
+
+struct node *MultPoly(struct node *p1, struct node *p2)
+{
+	struct node *resultPoly = NULL;
+
+	if(p1 == NULL || p2 == NULL)
+	{
+		printf("\nMultiplied polynomial is zero polunomial");
+		return NULL;
+	}
+	
+	while(p1 != NULL)
+	{
+		while(p2 != NULL)
+		{
+			resultPoly = insert(resultPoly, (p1->fCoeff * p2->fCoeff), (p1->iExp + p2->iExp));
+			p2=p2->link;
+		}
+		p1=p1->link;
+	}
+	return resultPoly;
+}
+
 void display(struct node *start)
 {
 	struct node *p;
