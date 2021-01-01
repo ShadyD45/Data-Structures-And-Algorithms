@@ -3,7 +3,7 @@
 
 #define MAX 10
 
-int top = -1;
+int iTop = -1;
 int iarrStack[MAX];
 
 void display();
@@ -48,21 +48,21 @@ void push(int data)
 		printf("\nStack Overflow!!");
 		exit(1);
 	}
-	top += 1;
-	iarrStack[top] = data;
+	iTop += 1;
+	iarrStack[iTop] = data;
 }
 
 int pop()
 {
-	int item;
+	int iItem;
 	if(isEmpty())
 	{
 		printf("\nStack underflow!!");
 		exit(1);
 	}
-	item = iarrStack[top];
-	top -= 1;
-	return item;
+	iItem = iarrStack[iTop];
+	iTop -= 1;
+	return iItem;
 }
 
 void peek()
@@ -73,7 +73,7 @@ void peek()
 		return;
 	}
 	
-	printf("\nItem at the top is: %d",iarrStack[top]);
+	printf("\nItem at the Top is: %d",iarrStack[iTop]);
 }
 
 void display()
@@ -86,7 +86,7 @@ void display()
 	}
 	else
 	{
-		for(i = top; i >= 0; --i)
+		for(i = iTop; i >= 0; --i)
 		{
 			printf("\t%d\n",iarrStack[i]);
 		}
@@ -96,7 +96,7 @@ void display()
 
 int isEmpty()
 {
-	if(top == -1)
+	if(iTop == -1)
 		return 1;
 	else
 		return 0;
@@ -104,7 +104,7 @@ int isEmpty()
 
 int isFull()
 {
-	if(top == (MAX - 1))
+	if(iTop == (MAX - 1))
 		return 1;
 	else
 		return 0;
