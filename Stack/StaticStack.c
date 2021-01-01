@@ -25,15 +25,15 @@ void main()
 		switch(iChoice)
 		{
 			case 1:	printf("\nEnter item to push onto the stack: ");
-					scanf("%d",&iItem);
-					push(iItem);
-					break;
+				scanf("%d",&iItem);
+				push(iItem);
+				break;
 			case 2: printf("\n%d Popped from stack",pop());
-					break;
+				break;
 			case 3: display();
-					break;
+				break;
 			case 4: peek();
-					break;
+				break;
 			case 5: exit(1);
 			
 			default: printf("\nWrong Choice!! Pleae enter valid input");				
