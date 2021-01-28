@@ -15,6 +15,7 @@ void CreateBST(int);
 void PreorderTraversal(struct node*);
 void InorderTraversal(struct node*);
 void PostorderTraversal(struct node*);
+int GetHeightOfTree(struct node*);
 
 int main()
 {
@@ -24,30 +25,32 @@ int main()
 	while(1)
 	{
 		printf("\n\n1) Create Tree\n2) Traverse Using Preorder");
-		printf("\n3) Traverse Using Inorder\n4) Traverse Using Postorder\n5) Exit\nChoice: ");
+		printf("\n3) Traverse Using Inorder\n4) Traverse Using Postorder\n5) Get Height Of Tree\n6) Exit\nChoice: ");
 		scanf("%d",&iChoice);
 		
 		switch(iChoice)
 		{
 			case 1: printf("Enter Number of Nodes: ");
-					scanf("%d",&iNodeCnt);
-					printf("Enter the elements: ");
-					for(i = 0; i < iNodeCnt; ++i)
-					{
-						scanf("%d",&iData);
-						CreateBST(iData);
-					}
-					break;
+				scanf("%d",&iNodeCnt);
+				printf("Enter the elements: ");
+				for(i = 0; i < iNodeCnt; ++i)
+				{
+					scanf("%d",&iData);
+					CreateBST(iData);
+				}
+				break;
 			case 2: PreorderTraversal(root);
-					printf("\n");
-					break;
+				printf("\n");
+				break;
 			case 3: InorderTraversal(root);
-					printf("\n");
-					break;		
+				printf("\n");
+				break;		
 			case 4: PostorderTraversal(root);
-					printf("\n");
-					break;				
-			case 5: exit(1);
+				printf("\n");
+				break;				
+			case 5: printf("Height is: %d\n",GetHeightOfTree(root));
+				break;					
+			case 6: exit(1);
 				
 			default: printf("\nWrong Choice!! Please enter correct option");
 		}
@@ -124,4 +127,21 @@ void PostorderTraversal(struct node *ptr)
 		PreorderTraversal(ptr->right);
 		printf("%d  ",ptr->iInfo);
 	}
+}
+
+int GetHeightOfTree(struct node *root)
+{
+	int iLeftHeight, iRightHeight;
+	
+	/* Base Case */
+	if(root == NULL)
+		return 0;
+		
+	iLeftHeight = GetHeightOfTree(root->left);
+	iRightHeight = GetHeightOfTree(root->right);
+	
+	if(iLeftHeight > iRightHeight)
+		return 1 + iLeftHeight;
+	else
+		return 1 + iRightHeight;		
 }
