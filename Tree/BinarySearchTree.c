@@ -16,6 +16,8 @@ void Mirror(struct node*);
 void PreorderTraversal(struct node*);
 void InorderTraversal(struct node*);
 void PostorderTraversal(struct node*);
+void LevelOrderTraversal(struct node* ptr);
+void PrintGivenLevel(struct node* ptr, int level);
 int  GetHeightOfTree(struct node*);
 
 int main()
@@ -26,7 +28,7 @@ int main()
 	while(1)
 	{
 		printf("\n\n1) Create Tree\n2) Traverse Using Preorder");
-		printf("\n3) Traverse Using Inorder\n4) Traverse Using Postorder\n5) Get Height Of Tree\n6)Mirror\n7) Exit\nChoice: ");
+		printf("\n3) Traverse Using Inorder\n4) Traverse Using Postorder\n5) Level Order Traversal\n6) Get Height Of Tree\n7) Mirror\n8) Exit\nChoice: ");
 		scanf("%d",&iChoice);
 		
 		switch(iChoice)
@@ -49,11 +51,14 @@ int main()
 			case 4: PostorderTraversal(root);
 					printf("\n");
 					break;	
-			case 5: printf("Height is: %d\n",GetHeightOfTree(root));
+			case 5: LevelOrderTraversal(root);
+					printf("\n");
 					break;
-			case 6: Mirror(root);	
+			case 6: printf("Height is: %d\n",GetHeightOfTree(root));
+					break;
+			case 7: Mirror(root);	
 					break;				
-			case 7: exit(1);
+			case 8: exit(1);
 				
 			default: printf("\nWrong Choice!! Please enter correct option");
 		}
@@ -118,7 +123,7 @@ void Mirror(struct node* node)
         Mirror(node->right);
       
         /* swap the pointers in this node */
-        temp     = node->left;
+        temp = node->left;
         node->left = node->right;
         node->right = temp;
     }
@@ -155,6 +160,35 @@ void PostorderTraversal(struct node *ptr)
 	PostorderTraversal(ptr->left);
 	PostorderTraversal(ptr->right);
 	printf("%d  ",ptr->iInfo);
+}
+
+void LevelOrderTraversal(struct node* ptr)
+{
+    int iHeight = GetHeightOfTree(root);
+    int i;
+    for (i = 1; i <= iHeight; i++)
+    {
+        PrintGivenLevel(ptr, i);
+    }
+}
+ 
+/* Print nodes at a given level */
+void PrintGivenLevel(struct node* ptr, int iLevel)
+{
+	/* Base Case */
+    if (ptr == NULL)
+    {
+        return;
+    }
+    if (iLevel == 1)
+    {
+        printf("%d ",ptr->iInfo);
+    }
+    else if (iLevel > 1)
+    {
+        PrintGivenLevel(ptr->left, iLevel - 1);
+        PrintGivenLevel(ptr->right, iLevel - 1);
+    }
 }
 
 int GetHeightOfTree(struct node *root)
