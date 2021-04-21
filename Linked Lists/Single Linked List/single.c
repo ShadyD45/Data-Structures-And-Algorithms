@@ -1,293 +1,285 @@
 #include<stdio.h>
 #include<stdlib.h>
-#include"change.h"
-#include"view.h"
+
+// We pass address of first pointer only to the functions which change linkedlist
+struct node
+{
+	int iData;
+	struct node *Next;
+};
+
+typedef struct node NODE;
+typedef struct node * PNODE;
+typedef struct node ** PPNODE;
+
+
+void Display(PNODE);
+int Count(PNODE);
+void InsertFirst(PPNODE, int);
+void InsertLast(PPNODE, int);
+void InsertAt(PPNODE, int, int);
+void DeleteFirst(PPNODE);
+void DeleteLast(PPNODE);
+
+
+void InsertFirst(PPNODE Head, int iNum)
+{
+	PNODE newn = NULL;
+	
+	newn = (PNODE)malloc(sizeof(NODE));
+	newn->iData = iNum;
+	newn->Next = NULL;
+	
+	if(*Head == NULL)	// Linked List is empty
+	{
+		*Head = newn;
+	}
+	else				// Linked List contains atleast one node
+	{
+		newn->Next = *Head;
+		*Head = newn;
+	}
+}
+
+void InsertLast(PPNODE Head, int iNum)
+{
+	PNODE newn = NULL;
+	PNODE temp = *Head;
+	
+	newn = (PNODE)malloc(sizeof(NODE));
+	newn->iData = iNum;
+	newn->Next = NULL;
+	
+	if(*Head == NULL)	// Linked List is empty
+	{
+		*Head = newn;
+	}
+	else				// Linked List contains atleast one node
+	{
+		while(temp->Next != NULL)
+		{
+			temp = temp->Next;
+		}
+		temp->Next = newn;
+	}
+}
+
+void InsertAt(PPNODE Head, int iNum, int iPos)
+{
+	PNODE temp = *Head;
+	PNODE newn = NULL;
+	int iCnt = 1;
+	
+	if(((*Head) == NULL) || (iPos > Count(*Head) + 1))		// If Linked List is empty
+	{
+		return;
+	}
+	else if(iPos == 1)					// If the user wants to add at 1st position
+	{
+		InsertFirst(Head, iNum);	// Just reuse the InsertFirst() we wrote
+	}
+	else
+	{
+		while(iCnt < iPos-1)
+		{
+			temp = temp->Next;
+			iCnt++;
+		}
+		
+		newn = (PNODE)malloc(sizeof(NODE));
+		newn->iData = iNum;
+		
+		newn->Next = temp->Next;
+		temp->Next = newn;
+	}
+}
+
+void DeleteFirst(PPNODE Head)
+{
+	PNODE temp = *Head;
+	if(*Head == NULL)					// If LinkedList is Empty
+	{
+		return;
+	}
+	else if((*Head)->Next == NULL)		// If LinkedList has single node
+	{
+		free(*Head);	// Delete first node
+		*Head = NULL;	// Set First pointer to NULL
+	}
+	else								// If LinkedList has more than one node
+	{
+		*Head = (*Head)->Next;
+		free(temp);
+	}
+}
+
+void DeleteLast(PPNODE Head)
+{
+	PNODE temp = *Head;
+	if(*Head == NULL)					// If LinkedList is Empty
+	{
+		return;
+	}
+	else if((*Head)->Next == NULL)		// If LinkedList has single node
+	{
+		free(*Head);	// Delete First Node
+		*Head = NULL;	// Set First Pointer to NULL
+	}
+	else								// If LinkedList has more than one node
+	{
+		while(temp->Next->Next != NULL)
+		{
+			temp = temp->Next;
+		}
+		free(temp->Next);
+		temp->Next = NULL;
+	}
+}
+
+void Display(PNODE Head)
+{
+	printf("\n");
+	while(Head != NULL)
+	{
+		printf("| %d |->",Head->iData);
+		Head = Head->Next;
+	}
+	printf("NULL\n");
+}
+
+int Count(PNODE Head)
+{
+	int iCnt = 0;
+	while(Head != NULL)
+	{
+		iCnt++;
+		Head = Head->Next;
+	}
+	return iCnt;
+}
+
+
+int Search(PNODE Head, int iNum)
+{
+	int iCnt = 1;
+	
+	while(Head != NULL)
+	{
+		if(Head->iData == iNum)
+		{
+			break;
+		}
+		Head = Head->Next;
+		iCnt++;
+	}
+	
+	// Return -1 if element not found else return the position	
+	if(Head == NULL)
+	{
+		return -1;
+	}
+	else
+	{
+		return iCnt;
+	}
+}
+
 
 int main()
 {
-	int choice,n,m,position,i;
+	PNODE First = NULL;
+	int iNum = 0, iNo = 0;
+	int iPos = 0, iChoice = 0;
+	int iCnt = 0;
 	
 	while(1)
 	{
 		printf("\nWhat Do you want to do?\n");
 		printf("1.Create List\n");
 		printf("2.Add at beginning\n");
-		printf("3.Inser At\n");
-		printf("4.Delete\n");
-		printf("5.Display\n");
-		printf("6.Count\n");
-		printf("7.Reverse\n");
-		printf("8.Search\n");
-		printf("9.Sort List By Exchanging Links\n");
+		printf("3.Insert At\n");
+		printf("4.Append\n");
+		printf("5.Delete First\n");
+		printf("6.Delete Last\n");
+		printf("7.Display\n");
+		printf("8.Count\n");
+		printf("9.Search\n");
+		//printf("10.Reverse\n");
+		//printf("11.Sort List By Exchanging Links\n");
 		printf("10.Quit\n");
 		printf("Enter your choice:-->");
-		scanf("%d",&choice);
+		scanf("%d",&iChoice);
 		
 		
-		switch(choice)
+		switch(iChoice)
 		{
 			case 1:	printf("\nHow many elements you want:-->");
-					scanf("%d",&n);
+				scanf("%d",&iNo);
 					
-					printf("\nEnter the elements:-->");
-					for(i=0;i<n;i++)
-					{
-						scanf("%d",&m);
-						CreateList(m);		
-					}
-					break;
+				printf("\nEnter the elements:-->");
+				for(iCnt = 0; iCnt < iNo; iCnt++)
+				{
+					scanf("%d",&iNum);
+					InsertLast(&First, iNum);		
+				}
+				break;
 
 			case 2:	printf("\nEnter The Element To Add:-->");
-					scanf("%d",&m);
-					AddAtBeg(m);	
-					break;
-
-			case 3:	printf("\nEnter The Element To Add:-->");
-					scanf("%d",&m);
+				scanf("%d",&iNum);
+				InsertFirst(&First, iNum);	
+				break;
 					
-					printf("\nEnter position:-->");
-					scanf("%d",&position);
-					InsertAt(m,position);	
-					break;
+			case 4: printf("\nEnter the element:-->");
+				scanf("%d",&iNum);
+				InsertLast(&First, iNum);
+				break;
+					
+			case 3:	printf("\nEnter The Element To Add:-->");
+				scanf("%d",&iNum);
+					
+				printf("\nEnter position:-->");
+				scanf("%d",&iPos);
+					
+				InsertAt(&First, iNum, iPos);	
+				break;
 
-			case 4:	if(start==NULL)
-					{
-						printf("\nList is empty...");
-					}	
-							
-					printf("\nEnter element to delete:-->");
-					scanf("%d",&m);
+			case 5:	DeleteFirst(&First);	
+				break;
 
-					del(m);	
-					break;
+			case 6: DeleteLast(&First);
+				break;
 
-			case 5:	display();	 
-					break;
+			case 7:	Display(First);	 
+				break;
 			
-			case 6: count();	
-					break;
+			case 8: iCnt = Count(First);
+				printf("\nCount: %d\n",iCnt);	
+				break;
+					
+			case 9: printf("\nEnter Element To Search:-->");
+				scanf("%d",&iNum);
+				iCnt = Search(First, iNum);
+				if(iCnt == -1)
+				{	
+					printf("\nElement %d not found..\n",iNum);	
+				}
+				else
+				{
+					printf("\nElement %d found at position %d\n",iNum, iCnt);
+				}
+				break;
+			/*case 10: reverse();	
+					 break;
 
-			case 7: reverse();	
-					break;
-
-			case 8: printf("\nEnter Element To Search:-->");
-					scanf("%d",&m);
-					search(m);	
-					break;
-
-			case 9: SortByExchangingLinks();
-					break;
-			case 10: exit(1);
-
+			case 11: SortByExchangingLinks(&First);
+					break;*/
+					
+			case 10: free(First);
+				 exit(1);
+					 
 			default: printf("WRONG OPTION\n");
 				
 		}
 	}
+	return 0;
 }
-
-
-void CreateList(int data)
-{
-	struct node *ptr,*temp;
-	temp=malloc(sizeof(struct node *));
-	temp->info=data;
-	temp->link=NULL;	//if list only has single element
-
-	if(start==NULL)
-	{
-		start = temp;
-		last  = start;
-	}
-	else
-	{
-		last->link = temp;
-		last = temp;
-	}
-}//End Of Create List function
-
-
-void AddAtBeg(int data)
-{
-	struct node*temp;
-	temp=malloc(sizeof(struct node *));
-	temp->info=data;	
-	temp->link=start;
-	start=temp;	
-	printf("Element %d added at beginning\n\n",data);
-}//End of Add at begining function
-
-
-void InsertAt(int data,int pos)
-{
-	struct node *temp,*ptr;
-	int i;
-	ptr=start;
-	
-	if(ptr == NULL)
-	{
-		printf("List is empty!!\n");
-		return;
-	}
-	else if(pos == 1)
-	{
-		AddAtBeg(data);
-	}
-	else
-	{
-		for(i=1;i<pos-1;i++)
-		{
-			ptr=ptr->link;
-			if(ptr==NULL)
-			{
-				printf("Please enter less position \n");
-				return;
-			}
-		}
-		temp=malloc(sizeof(struct node *));
-		temp->link = ptr->link;
-		temp->info = data;
-		ptr->link = temp;
-		printf("Element %d added at %d position\n\n",data,pos);
-	}
-}//End of add after function
-
-void del(int data)
-{
-	struct node *temp,*ptr;
-	
-	if(start == NULL)
-	{
-		printf("List is empty!!\n");
-		return;
-	}		
-	
-	if(start->info == data) /* Deletion of first node*/
-	{
-		temp = start;
-		start = start->link;
-		free(temp);
-		return;
-	}
-	
-	ptr = start;	/* Deletion in between or at end */
-	while(ptr->link != NULL)
-	{
-		if(ptr->link->info == data)
-		{
-			temp = ptr->link;
-			
-			if(temp->link == NULL)
-				last = ptr;
-				
-			ptr->link = temp->link;
-			free(temp);
-			return;
-		}
-		ptr = ptr->link;
-	}
-	printf("Element %d not found\n",data);	
-}//End of delete function
-
-void reverse()
-{
-	struct node *prev, *ptr, *next;
-	prev = NULL;
-	ptr = start;
-	last = start;
-	while(ptr != NULL)
-	{
-		next = ptr->link;
-		ptr->link = prev;
-		prev = ptr;
-		ptr = next;
-	}
-	
-	start = prev;
-	printf("\nReversed ");
-	display();
-}//End of reverse
-
-void SortByExchangingLinks()
-{
-	struct node *p,*q,*r,*s,*temp;
-	
-	for(r=p=start; p->link != NULL; r = p, p = p->link)
-	{
-		for(s=q=p->link; q!=NULL; s = q, q = q->link)
-		{
-			if(p->info > q->info)
-			{
-				temp = p->link;
-				p->link = q->link;
-				q->link = temp;
-				
-				if(q == last)
-					last = p;
-				if(p != start)
-					r->link = q;
-				s->link = p;
-				if(p == start)
-					start = q;
-				temp = p;
-				p = q;
-				q = temp;	
-			}
-		}
-	}	
-	printf("\nSorted ");
-	display();	
-}
-
-void count()
-{
-	struct node *ptr=start;
-	int cnt=0;
-	
-	while(ptr!=NULL)
-	{
-		ptr=ptr->link;
-		cnt++;	
-	}
-	printf("There are %d elements in the list\n\n",cnt);
-}//End of count function
-
-void search(int data)
-{
-	struct node *ptr=start;
-	int pos=1;
-	
-	while(ptr!=NULL)
-	{
-		if(ptr->info==data)
-		{
-			printf("Element %d found at %d postion\n\n",data,pos);
-			return;
-		}
-		ptr=ptr->link;
-		pos++;
-	}
-
-	if(ptr==NULL)
-	{
-		printf("Item %d not found in list\n\n");	
-	}
-}//End of search function
-
-void display()
-{
-	struct node *ptr;
-	if(start==NULL)
-	{
-		printf("List is Empty\n");
-		return;
-	}
-	
-	ptr=start;
-	printf("List is:-->\n");
-	while(ptr!=NULL)
-	{
-		printf("%4d",ptr->info);
-		ptr=ptr->link;
-	}
-	printf("\n");
-}//End of display function
