@@ -1,7 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 
-// We pass address of first pointer only to the functions which change linkedlist
+
 struct node
 {
 	int iData;
@@ -12,9 +12,10 @@ typedef struct node NODE;
 typedef struct node * PNODE;
 typedef struct node ** PPNODE;
 
-
+// We pass address of first pointer only to the functions which change linkedlist
 void Display(PNODE);
 int Count(PNODE);
+void Reverse(PPNODE)
 void InsertFirst(PPNODE, int);
 void InsertLast(PPNODE, int);
 void InsertAt(PPNODE, int, int);
@@ -70,13 +71,13 @@ void InsertAt(PPNODE Head, int iNum, int iPos)
 	PNODE newn = NULL;
 	int iCnt = 1;
 	
-	if(((*Head) == NULL) || (iPos > Count(*Head) + 1))		// If Linked List is empty
+	if(((*Head) == NULL) || (iPos > Count(*Head) + 1))
 	{
 		return;
 	}
-	else if(iPos == 1)					// If the user wants to add at 1st position
+	else if(iPos == 1)
 	{
-		InsertFirst(Head, iNum);	// Just reuse the InsertFirst() we wrote
+		InsertFirst(Head, iNum);
 	}
 	else
 	{
@@ -136,6 +137,23 @@ void DeleteLast(PPNODE Head)
 	}
 }
 
+void Reverse(PPNODE Head)
+{
+	PNODE curr = *Head;
+	PNODE prev = NULL;
+	PNODE next = NULL;
+	
+	while(curr != NULL)
+	{
+		next = curr->Next;
+		curr->Next = prev;
+		prev = curr;
+		curr = next;
+	}
+	
+	*Head = prev;
+}
+
 void Display(PNODE Head)
 {
 	printf("\n");
@@ -173,7 +191,7 @@ int Search(PNODE Head, int iNum)
 		iCnt++;
 	}
 	
-	// Return -1 if element not found else return the position	
+	// Return -1 if element not found else return position	
 	if(Head == NULL)
 	{
 		return -1;
@@ -204,9 +222,9 @@ int main()
 		printf("7.Display\n");
 		printf("8.Count\n");
 		printf("9.Search\n");
-		//printf("10.Reverse\n");
+		printf("10.Reverse\n");
 		//printf("11.Sort List By Exchanging Links\n");
-		printf("10.Quit\n");
+		printf("11.Quit\n");
 		printf("Enter your choice:-->");
 		scanf("%d",&iChoice);
 		
@@ -268,13 +286,14 @@ int main()
 					printf("\nElement %d found at position %d\n",iNum, iCnt);
 				}
 				break;
-			/*case 10: reverse();	
-					 break;
+				
+			case 10: Reverse(&First);	
+				 break;
 
-			case 11: SortByExchangingLinks(&First);
+			/*case 9: SortByExchangingLinks(&First);
 					break;*/
 					
-			case 10: free(First);
+			case 11: free(First);
 				 exit(1);
 					 
 			default: printf("WRONG OPTION\n");
