@@ -6,23 +6,23 @@ struct node {
 	struct node *Next;
 };
 
-typedef struct node PNODE;
+typedef struct node NODE;
 typedef struct node * PNODE;
 typedef struct node ** PPNODE;
 
-int isEmpty();
+int isEmpty(PNODE);
 int Delete(PPNODE);
 void Insert(PPNODE, PPNODE, int);
 void Display(PNODE);
 
 void main()
 {
-	PNODE Front = NULL, Rear = NULL
+	PNODE Front = NULL, Rear = NULL;
 	int iChoice = 0, iItem = 0;
 	
 	while(1)
 	{
-		printf("\n1) Insert\n2) Deleteete\n3) Display\n4) Quit");
+		printf("\n1) Insert\n2) Delete\n3) Display\n4) Quit");
 		printf("\nWhat do you want to do: ");
 		scanf("%d",&iChoice);
 		
@@ -32,9 +32,9 @@ void main()
 					scanf("%d",&iItem);
 					Insert(&Front, &Rear, iItem);
 					break;
-			case 2: printf("\n%d Deleteeted from queue",Delete(&Front, &Rear));
+			case 2: printf("\n%d Deleted from queue",Delete(&Front));
 					break;
-			case 3: Display(First);
+			case 3: Display(Front);
 					break;
 			case 4: exit(1);
 			
@@ -43,66 +43,77 @@ void main()
 	}
 }
 
-void Insert(int iData)
+void Insert(PPNODE Front, PPNODE Rear, int iData)
 {
-	struct node *temp = (struct node *)malloc(sizeof(struct node));
+	PNODE temp = (PNODE)malloc(sizeof(NODE));
 	
-	if(temp == NULL)
+	if(NULL == temp)
 	{
-		printf("\nNot enough memory");
+		printf("\nNot enough memory!");
 		return;
 	}
+	
 	temp->iItem = iData;
 	
-	if(front == NULL)
-		front = temp;
-	else
-		rear->link = temp;
-	rear = temp;	
+	if(isEmpty(*Front))		// If queue is empty
+	{
+		*Front = temp;
+	}
+	else					// If there is atleast one item in queue
+	{
+		(*Rear)->Next = temp;
+	}
+	*Rear = temp;	
 }
 
-int Delete()
+int Delete(PPNODE Front)
 {
-	int iItem;
-	struct node *temp;
-	if(isEmpty())
+	int iItem = 0;
+	PNODE temp = NULL;
+	
+	if(isEmpty(*Front))
 	{
-		printf("\nQueue underflow");
+		printf("\nQueue underflow\n");
 		exit(1);
 	}
-	iItem = front->iItem;
-	temp = front;
-	front = front->link;
+	
+	iItem = (*Front)->iItem;
+	temp = *Front;
+	*Front = (*Front)->Next;
 	free(temp);
 	
 	return iItem;
 }
 
-void Display()
+void Display(PNODE Front)
 {	
-	struct node *ptr;
-	if(isEmpty())
+	PNODE temp = NULL;
+	if(isEmpty(Front))
 	{
 		printf("\nQueue is empty!!");
 		return;
 	}
 	else
 	{
-		ptr = front;
+		temp = Front;
 		printf("\nQueue: ");
-		while(ptr != NULL)
+		while(NULL != temp)
 		{
-			printf("  %d",ptr->iItem);
-			ptr = ptr->link;
+			printf("  %d",temp->iItem);
+			temp = temp->Next;
 		}
 	}
 	printf("\n");
 }
 
-int isEmpty()
+int isEmpty(PNODE Front)
 {
-	if(front == NULL)
+	if(NULL == Front)
+	{
 		return -1;
+	}
 	else
+	{
 		return 0;
+	}
 }
