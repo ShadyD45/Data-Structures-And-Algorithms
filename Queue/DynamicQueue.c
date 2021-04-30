@@ -3,32 +3,37 @@
 
 struct node {
 	int iItem;
-	struct node *link;
-}*front = NULL, *rear = NULL;
+	struct node *Next;
+};
+
+typedef struct node PNODE;
+typedef struct node * PNODE;
+typedef struct node ** PPNODE;
 
 int isEmpty();
-int del();
-void display();
-void insert(int);
+int Delete();
+void Insert(int);
+void Display();
 
 void main()
 {
+	PNODE Front = NULL, Rear = NULL
 	int iChoice, iItem;
 	while(1)
 	{
-		printf("\n1) Insert\n2) Delete\n3) Display\n4) Quit");
+		printf("\n1) Insert\n2) Deleteete\n3) Display\n4) Quit");
 		printf("\nWhat do you want to do: ");
 		scanf("%d",&iChoice);
 		
 		switch(iChoice)
 		{
-			case 1:	printf("\nEnter item to insert in the queue: ");
+			case 1:	printf("\nEnter item to Insert in the queue: ");
 					scanf("%d",&iItem);
-					insert(iItem);
+					Insert(iItem);
 					break;
-			case 2: printf("\n%d Deleted from queue",del());
+			case 2: printf("\n%d Deleteeted from queue",Deleteete());
 					break;
-			case 3: display();
+			case 3: Display();
 					break;
 			case 4: exit(1);
 			
@@ -37,7 +42,7 @@ void main()
 	}
 }
 
-void insert(int iData)
+void Insert(int iData)
 {
 	struct node *temp = (struct node *)malloc(sizeof(struct node));
 	
@@ -55,7 +60,7 @@ void insert(int iData)
 	rear = temp;	
 }
 
-int del()
+int Delete()
 {
 	int iItem;
 	struct node *temp;
@@ -72,7 +77,7 @@ int del()
 	return iItem;
 }
 
-void display()
+void Display()
 {	
 	struct node *ptr;
 	if(isEmpty())
