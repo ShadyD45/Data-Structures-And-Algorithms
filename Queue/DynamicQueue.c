@@ -11,14 +11,15 @@ typedef struct node * PNODE;
 typedef struct node ** PPNODE;
 
 int isEmpty();
-int Delete();
-void Insert(int);
-void Display();
+int Delete(PPNODE);
+void Insert(PPNODE, PPNODE, int);
+void Display(PNODE);
 
 void main()
 {
 	PNODE Front = NULL, Rear = NULL
-	int iChoice, iItem;
+	int iChoice = 0, iItem = 0;
+	
 	while(1)
 	{
 		printf("\n1) Insert\n2) Deleteete\n3) Display\n4) Quit");
@@ -29,11 +30,11 @@ void main()
 		{
 			case 1:	printf("\nEnter item to Insert in the queue: ");
 					scanf("%d",&iItem);
-					Insert(iItem);
+					Insert(&Front, &Rear, iItem);
 					break;
-			case 2: printf("\n%d Deleteeted from queue",Delete());
+			case 2: printf("\n%d Deleteeted from queue",Delete(&Front, &Rear));
 					break;
-			case 3: Display();
+			case 3: Display(First);
 					break;
 			case 4: exit(1);
 			
