@@ -1,21 +1,27 @@
 #include<stdio.h>
 #include<stdlib.h>
+
 struct node
 {
 	int iItem;
-	struct node *link;
-}*top = NULL;
+	struct node *Next;
+};
 
-void display();
-void push(int);
-int peek();
-int pop();
-int isFull();
-int isEmpty();
+typedef struct node NODE;
+typedef struct node * PNODE;
+typedef struct node ** PPNODE;
+
+void Display(PNODE);
+void push(PPNODE, int);
+int peek(PNODE);
+int pop(PPNODE);
+int isEmpty(PNODE);
 
 void main()
 {
 	int iChoice, iItem;
+	PNODE Top = NULL;
+	
 	while(1)
 	{
 		printf("\n1) Push\n2) Pop\n3) Display\n4) Peek\n5) Quit");
@@ -26,13 +32,13 @@ void main()
 		{
 			case 1:	printf("\nEnter item to push onto the stack: ");
 					scanf("%d",&iItem);
-					push(iItem);
+					push(&Top, iItem);
 					break;
-			case 2: printf("\n%d Popped from stack",pop());
+			case 2: printf("\n%d Popped from stack",pop(&Top));
 					break;
-			case 3: display();
+			case 3: Display(Top);
 					break;
-			case 4: printf("\nItem at the Top is: %d",peek());
+			case 4: printf("\nItem at the Top is: %d",peek(Top));
 					break;
 			case 5: exit(1);
 			
@@ -41,70 +47,74 @@ void main()
 	}
 }
 
-void push(int data)
+void push(PPNODE Top, int iData)
 {
-	struct node *temp;
-	temp = (struct node *)malloc(sizeof(struct node));
-	if(temp == NULL)
+	PNODE temp;
+	temp = (PNODE)malloc(sizeof(NODE));
+	if(NULL == temp)
 	{
-		printf("\nStack Overflow!!");
+		printf("\nStack Overflow!!\n");
 		exit(1);
 	}
-	temp->iItem	= data;
-	temp->link = top;
-	top = temp;
+	temp->iItem = iData;
+	temp->Next = *Top;
+	*Top = temp;
 }
 
-int pop()
+int pop(PPNODE Top)
 {
-	int iData;
-	struct node *temp;
-	if(isEmpty())
+	int iData = -1;
+	PNODE temp;
+	
+	if(isEmpty(*Top))
 	{
-		printf("\nStack underflow!!");
+		printf("\nStack underflow!!\n");
 		exit(1);
 	}
 	
-	iData = top->iItem;
-	temp = top;
-	top = top->link;
+	iData = (*Top)->iItem;
+	temp = *Top;
+	*Top = (*Top)->Next;
 	free(temp);
 	
 	return iData;
 }
 
-int peek()
+int peek(PNODE Top)
 {
-	if(isEmpty())
+	if(isEmpty(Top))
 	{
-		printf("\nStack underflow!!");
+		printf("\nStack underflow!!\n");
 		exit(1);
 	}
-	return top->iItem;
+	return Top->iItem;
 }
 
-void display()
+void Display(PNODE Top)
 {
 	int i;
-	struct node *ptr;
-	if(isEmpty())
+	PNODE ptr = NULL;
+	
+	if(isEmpty(Top))
 	{
-		printf("\nStack is empty!!");
+		printf("\nStack is empty!!\n");
 		return;
 	}
 	else
 	{
-		for(ptr = top; ptr != NULL; ptr = ptr->link)
+		ptr = Top;
+		while(NULL != ptr)
 		{
 			printf("\t%d\n",ptr->iItem);
+			ptr = ptr->Next;
 		}
 	}
 	printf("\n");
 }
 
-int isEmpty()
+int isEmpty(PNODE Top)
 {
-	if(top == NULL)
+	if(NULL == Top)
 		return 1;
 	else
 		return 0;
