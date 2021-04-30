@@ -31,7 +31,7 @@ void main()
 					scanf("%d",&iItem);
 					Insert(iItem);
 					break;
-			case 2: printf("\n%d Deleteeted from queue",Deleteete());
+			case 2: printf("\n%d Deleteeted from queue",Delete());
 					break;
 			case 3: Display();
 					break;
