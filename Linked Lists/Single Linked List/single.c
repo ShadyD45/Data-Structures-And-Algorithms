@@ -15,7 +15,7 @@ typedef struct node ** PPNODE;
 // We pass address of first pointer only to the functions which change linkedlist
 void Display(PNODE);
 int Count(PNODE);
-void Reverse(PPNODE)
+void Reverse(PPNODE);
 void InsertFirst(PPNODE, int);
 void InsertLast(PPNODE, int);
 void InsertAt(PPNODE, int, int);
@@ -69,15 +69,19 @@ void InsertAt(PPNODE Head, int iNum, int iPos)
 {
 	PNODE temp = *Head;
 	PNODE newn = NULL;
-	int iCnt = 1;
+	int iCnt = 1, iNoOfNodes = Count(*Head);;
 	
-	if(((*Head) == NULL) || (iPos > Count(*Head) + 1))
+	if(((*Head) == NULL) || (iPos >  (iNoOfNodes + 1)))
 	{
 		return;
 	}
 	else if(iPos == 1)
 	{
 		InsertFirst(Head, iNum);
+	}
+	else if(((iNoOfNodes + 1) == iPos))
+	{
+		InsertLast(Head, iNum);
 	}
 	else
 	{
@@ -288,7 +292,7 @@ int main()
 				break;
 				
 			case 10: Reverse(&First);	
-				 break;
+				 	break;
 
 			/*case 9: SortByExchangingLinks(&First);
 					break;*/
