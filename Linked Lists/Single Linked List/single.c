@@ -141,6 +141,38 @@ void DeleteLast(PPNODE Head)
 	}
 }
 
+void DeleteAt(PPNODE Head, int iPos)
+{
+	int iSize = 0, iCnt = 0;
+	iSize = Count(*Head);
+	PNODE Temp = *Head;
+	PNODE Target = NULL;
+	
+	if((iPos < 1)  || (iPos > iSize))
+	{
+		return;
+	}
+	
+	if(iPos == 1)
+	{
+		DeleteFirst(Head);
+	}
+	else if(iPos == iSize)
+	{
+		DeleteLast(Head);
+	}
+	else
+	{
+		for(iCnt = 1; iCnt < iPos-1; ++iCnt)
+		{
+			Temp = Temp->Next;
+		}
+		Target = Temp->Next;
+		Temp->Next = Target->Next;
+		free(Target);
+	}
+}
+
 void Reverse(PPNODE Head)
 {
 	PNODE curr = *Head;
@@ -223,12 +255,13 @@ int main()
 		printf("4.Append\n");
 		printf("5.Delete First\n");
 		printf("6.Delete Last\n");
-		printf("7.Display\n");
-		printf("8.Count\n");
-		printf("9.Search\n");
-		printf("10.Reverse\n");
-		//printf("11.Sort List By Exchanging Links\n");
-		printf("11.Quit\n");
+		printf("7.Delete At Position\n");
+		printf("8.Display\n");
+		printf("9.Count\n");
+		printf("10.Search\n");
+		printf("11.Reverse\n");
+		//printf("12.Sort List By Exchanging Links\n");
+		printf("12.Quit\n");
 		printf("Enter your choice:-->");
 		scanf("%d",&iChoice);
 		
@@ -236,69 +269,75 @@ int main()
 		switch(iChoice)
 		{
 			case 1:	printf("\nHow many elements you want:-->");
-				scanf("%d",&iNo);
-					
-				printf("\nEnter the elements:-->");
-				for(iCnt = 0; iCnt < iNo; iCnt++)
-				{
-					scanf("%d",&iNum);
-					InsertLast(&First, iNum);		
-				}
-				break;
+					scanf("%d",&iNo);
+						
+					printf("\nEnter the elements:-->");
+					for(iCnt = 0; iCnt < iNo; iCnt++)
+					{
+						scanf("%d",&iNum);
+						InsertLast(&First, iNum);		
+					}
+					break;
 
 			case 2:	printf("\nEnter The Element To Add:-->");
-				scanf("%d",&iNum);
-				InsertFirst(&First, iNum);	
-				break;
+					scanf("%d",&iNum);
+					InsertFirst(&First, iNum);	
+					break;
 					
 			case 4: printf("\nEnter the element:-->");
-				scanf("%d",&iNum);
-				InsertLast(&First, iNum);
-				break;
+					scanf("%d",&iNum);
+					InsertLast(&First, iNum);
+					break;
 					
 			case 3:	printf("\nEnter The Element To Add:-->");
-				scanf("%d",&iNum);
-					
-				printf("\nEnter position:-->");
-				scanf("%d",&iPos);
-					
-				InsertAt(&First, iNum, iPos);	
-				break;
+					scanf("%d",&iNum);
+						
+					printf("\nEnter position:-->");
+					scanf("%d",&iPos);
+						
+					InsertAt(&First, iNum, iPos);	
+					break;
 
 			case 5:	DeleteFirst(&First);	
-				break;
+					break;
 
 			case 6: DeleteLast(&First);
-				break;
+					break;
 
-			case 7:	Display(First);	 
-				break;
-			
-			case 8: iCnt = Count(First);
-				printf("\nCount: %d\n",iCnt);	
-				break;
+			case 7: printf("Enter Position: ");
+					scanf("%d",&iPos);
 					
-			case 9: printf("\nEnter Element To Search:-->");
-				scanf("%d",&iNum);
-				iCnt = Search(First, iNum);
-				if(iCnt == -1)
-				{	
-					printf("\nElement %d not found..\n",iNum);	
-				}
-				else
-				{
-					printf("\nElement %d found at position %d\n",iNum, iCnt);
-				}
-				break;
+					DeleteAt(&First, iPos);
+					break;
+
+			case 8:	Display(First);	 
+					break;
+			
+			case 9: iCnt = Count(First);
+					printf("\nCount: %d\n",iCnt);	
+					break;
+					
+			case 10: printf("\nEnter Element To Search:-->");
+					 scanf("%d",&iNum);
+					 iCnt = Search(First, iNum);
+					 if(iCnt == -1)
+					 {	
+						printf("\nElement %d not found..\n",iNum);	
+					 }
+					 else
+					 {
+						printf("\nElement %d found at position %d\n",iNum, iCnt);
+					 }
+					 break;
 				
-			case 10: Reverse(&First);	
-				 	break;
+			case 11: Reverse(&First);	
+				 	 break;
 
 			/*case 9: SortByExchangingLinks(&First);
 					break;*/
 					
-			case 11: free(First);
-				 exit(1);
+			case 12: free(First);
+				 	exit(1);
 					 
 			default: printf("WRONG OPTION\n");
 				
