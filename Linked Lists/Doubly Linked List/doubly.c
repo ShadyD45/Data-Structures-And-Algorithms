@@ -1,227 +1,274 @@
 #include<stdio.h>
 #include<stdlib.h>
-#include<malloc.h>
-#include"change.h"
-#include"view.h"
 
-int main()
+struct node 
 {
-	int choice,n,m,p,i;
-	
-	while(1)
-	{
-		printf("What Do you want to do?\n");
-		printf("1.Create List\n");
-		printf("2.Add at beginning\n");
-		printf("3.Add after\n");
-		printf("4.Delete\n");
-		printf("5.Display\n");
-		printf("6.Count\n");
-		printf("7.Reverse\n");
-		printf("8.Quit\n");
-		printf("Enter your choice:-->");
-		scanf("%d",&choice);
-		
-		
-		switch(choice)
-		{
-			case 1:	printf("\nHow many elements you want:-->");
-				scanf("%d",&n);
-				
-				printf("\nEnter the elements:-->");
-				for(i=0;i<n;i++)
-				{
-					scanf("%d",&m);
-					create_list(m);		//calling create list function
-				}
-				break;
+	struct node *prev;
+	int iData;
+	struct node *next;
+};
 
-			case 2:	printf("\nEnter The Element To Add:-->");
-				scanf("%d",&m);
-				addatbeg(m);	//calling addatbeg function	
-				break;
+typedef struct node NODE;
+typedef struct node * PNODE;
+typedef struct node ** PPNODE;
 
-			case 3:	printf("\nEnter The Element To Add and Position:-->");
-				scanf("%d %d",&m,&p);
-				addafter(m,p);	//calling addafter function
-				break;
+void InsertFirst(PPNODE, int);
+void InsertLast(PPNODE, int);
+void InsertAt(PPNODE, int, int);
+void DeleteFirst(PPNODE);
+void DeleteLast(PPNODE);
+void DeleteAt(PPNODE, int);
+void Display(PNODE);
+int  Count(PNODE);
 
-			case 4:	printf("\nEnter element to delete:-->");
-				scanf("%d",&m);
-
-				del(m);	//calling delete function
-				break;
-
-			case 5:	display();	//calling display function 
-				break;
-			
-			case 6: count();	//calling count function
-				break;
-
-			case 7: reverse();	//calling reverse function
-				break;
-
-			case 8: exit(1);
-				break;
-
-			default: printf("WRONG OPTION!! Please choose correct option\n");
-				
-		}
-	}
-}
-
-void create_list(int no)
+void InsertFirst(PPNODE Head, int iNum)
 {
-	struct node *temp,*q;
+	PNODE newn = (PNODE)malloc(sizeof(NODE));
+	newn->next = NULL;
+	newn->iData = iNum;
+	newn->prev = NULL;
 	
-	temp=malloc(sizeof(struct node *));
-	temp->data=no;
-	temp->next=NULL;
-	
-	if(start==NULL)
+	if(NULL == *Head)
 	{
-		temp->prev=NULL;
-		start=temp;
-		last=start;
+		*Head = newn;
 	}
 	else
 	{
-		last->next=temp;
-		temp->prev=last;
-		last = temp;
+		newn->next = *Head;
+		(*Head)->prev = newn;
+		*Head = newn;
 	}
-}//End of create list
+}
 
-void addatbeg(int no)
+void InsertLast(PPNODE Head, int iNum)
 {
-	struct node *temp;
-	temp=malloc(sizeof(struct node *));
+	PNODE Temp = *Head;
+	PNODE newn = (PNODE)malloc(sizeof(NODE));
+	newn->next = NULL;
+	newn->iData = iNum;
+	newn->prev = NULL;
 	
-	temp->data=no;
-	temp->prev=NULL;
-	temp->next=start;
-	start->prev=temp;
-	start=temp;
-	printf("\nElement %d Added at beginning\n\n",no);
-}//End of add at beginning
-
-void addafter(int no,int p)
-{
-	struct node *temp,*q;
-	int i;
-	q=start;
-
-	for(i=1;i<p-1;i++)
+	if(NULL == *Head)
 	{
-		q=q->next;
-		if(q->next==NULL)
+		*Head = newn;
+	}
+	else
+	{
+		while(NULL != Temp->next)
 		{
-			printf("\nPlease enter valid position:(\n\n");
-			return;		
+			Temp = Temp->next;
 		}
+		Temp->next = newn;
+		newn->prev = Temp;
 	}
-	
-	temp=malloc(sizeof(struct node *));
-	temp->data=no;
-	temp->next=q->next;
-	temp->prev=q;
-	q->next=temp;	
-	printf("\nElement %d Added at position %d\n\n",no,p);
-}//End of Add After
+}
 
-void del(int no)
+void InsertAt(PPNODE Head, int iNum, int iPos)
 {
-	struct node *temp,*q;
+	int iSize = 0, iCnt = 0;
+	PNODE Temp = *Head, newn = NULL;
+	iSize = Count(*Head);
 	
-	if(start->data==no)
+	if((iPos < 1) || (iPos > (iSize + 1)) || (NULL == (*Head)))
 	{
-		temp=start;
-		start=start->next; //first element deleted
-		start->prev=NULL;
-		free(temp);
-		printf("\nElement %d deleted\n\n",no);
-		return;	
+		return;
 	}
-	q=start;
-
-	while(q->next->next!=NULL)
+	
+	if(iPos == 1)
 	{
-		if(q->next->data==no)	//To delete element in between
+		InsertFirst(Head, iNum);
+	}
+	else if(iPos == iSize)
+	{
+		InsertLast(Head, iNum);
+	}
+	else
+	{	
+		newn = (PNODE)malloc(sizeof(NODE));
+		newn->next = NULL;
+		newn->prev = NULL;
+		newn->iData = iNum;
+		
+		for(iCnt = 1; iCnt < iPos-1; ++iCnt)
 		{
-			temp=q->next;
-			q->next=temp->next;
-			temp->next->prev=q;
-			free(temp);
-			printf("\nElement %d deleted\n\n",no);
-			return;
+			Temp = Temp->next;
 		}
 		
-		q=q->next;	
+		newn->next = Temp->next;
+		Temp->next->prev = newn;
+		Temp->next = newn;
+		newn->prev = Temp;
 	}
+}
 
-	if(q->next->data==no)	//To delete last element
+void DeleteFirst(PPNODE Head)
+{
+	if(NULL == *Head)				// Empty linked list	
 	{
-		temp=q->next;
-		free(temp);
-		q->next=NULL;
-		last = q;
-		printf("\nElement %d deleted\n\n",no);
+		return;
+	}
+	else if(NULL == (*Head)->next)	// Only one node in linked list
+	{
+		free(*Head);
+		*Head = NULL;
+	}
+	else							// More than one node in linked list
+	{
+		*Head = (*Head)->next;
+		free((*Head)->prev);
+		(*Head)->prev = NULL;
+	}
+}
+
+void DeleteLast(PPNODE Head)
+{
+	if(NULL == *Head)				// Empty linked list
+	{
+		return;
+	}
+	PNODE Temp = *Head;
+	
+	if(NULL == (*Head)->next)		// Only one node in linked list
+	{
+		free(*Head);
+		*Head = NULL;
+	}
+	else							// More than one node in linked list
+	{
+		while(NULL != Temp->next->next)
+		{
+			Temp = Temp->next;
+		}
+		free(Temp->next);
+		Temp->next = NULL;
+	}
+}
+
+void DeleteAt(PPNODE Head, int iPos)
+{
+	int iSize = 0, iCnt = 0;
+	PNODE Temp = *Head, Target = NULL;
+	iSize = Count(*Head);
+	
+	if((iPos < 1) || (iPos > (iSize + 1)) || (NULL == (*Head)))
+	{
 		return;
 	}
 	
-	printf("\nElement not %d found\n\n",no);
-}//End of delete
-
-void reverse()
-{
-	struct node *p1,*p2;
-	p1=start;
-	last=start;
-	p2=p1->next;
-	p1->next=NULL;
-	p1->prev=p2;
-
-	while(p2!=NULL)
+	if(iPos == 1)
 	{
-		p2->prev=p2->next;
-		p2->next=p1;
-		p1=p2;
-		p2=p2->prev;
+		DeleteFirst(Head);
 	}
-	start=p1;
-	printf("\nList Reversed\n\n");	
-}//End of reverse
+	else if(iPos == iSize)
+	{
+		DeleteLast(Head);
+	}
+	else
+	{	
+		for(iCnt = 1; iCnt < iPos-1; ++iCnt)
+		{
+			Temp = Temp->next;
+		}
+		
+		Target = Temp->next;
+		Temp->next = Target->next;
+		Target->next->prev = Temp;
+		free(Target);
+	}
+}
 
-void display()
+void Display(PNODE Head)
 {
-	struct node *q;
+	printf("NULL<=>");
+	while(NULL != Head)
+	{
+		printf("| %d |<=>",Head->iData);
+		Head = Head->next;	
+	}
 	
-	if(start==NULL)
-	{
-		printf("\nList is empty");
-		return;
-	}
-	q=start;
-	
-	printf("\nList is:-->");
-	while(q!=NULL)
-	{
-		printf("\t %4d",q->data);
-		q=q->next;
-	}
-	printf("\n\n");
-}//End od Diplay
+	printf("NULL\n");
+}
 
-void count()
+int Count(PNODE Head)
 {
-	struct node *q=start;
-	int cnt=0;
-
-	while(q!=NULL)
+	int iCnt = 0;
+	
+	while(NULL != Head)
 	{
-		cnt++;
-		q=q->next;
+		iCnt++;
+		Head = Head->next;	
 	}
+	
+	return iCnt;
+}
 
-	printf("\nThere are %d no. of elemenets in the list\n\n",cnt);
+int main()
+{
+	PNODE First = NULL;
+	
+	int iRet = 0, iChoice = 1, iValue = 0, iPos = 0;
+	
+	while(iChoice != 0)
+	{
+		printf("*********************************************\n");
+		printf("1. Insert First\n");
+		printf("2. Insert Last\n");
+		printf("3. Insert At Position\n");
+		printf("4. Delete First\n");
+		printf("5. Delete Last\n");
+		printf("6. Delete At Position\n");
+		printf("7. Display\n");
+		printf("8. Count\n");
+		printf("0. Exit\n");
+		printf("Enter you action on linked list: ");
+		scanf("%d",&iChoice);
+		printf("*********************************************\n");
+		
+		switch(iChoice)
+		{
+			case 1: printf("Enter element to insert: ");
+					scanf("%d",&iValue);
+					InsertFirst(&First, iValue);
+					break;
+					
+			case 2: printf("Enter element to insert: ");
+					scanf("%d",&iValue);
+					InsertLast(&First, iValue);
+					break;
+			
+			case 3: printf("Enter element to insert: ");
+					scanf("%d",&iValue);
+					printf("Enter Position: ");
+					scanf("%d",&iPos);
+					InsertAt(&First, iValue, iPos);
+					break;
+			
+			case 4: DeleteFirst(&First);
+					break;
+		
+			case 5: DeleteLast(&First);
+					break;
+			
+			case 6: printf("Enter Position: ");
+					scanf("%d",&iPos);
+					DeleteAt(&First, iPos);
+					break;
+			
+			case 7: printf("Contents of linked list are:\n");
+					Display(First);
+					break;
+			
+			case 8: iRet = Count(First);
+					printf("Number of nodes: %d\n",iRet);
+					break;
+			
+			case 0: printf("Thankyou for using!!\n");
+					break;
+					
+			default: printf("\nWrong Choice! Please select valid option\n\n");
+					 break;
+		}
+	}
+	
+	return 0;
 }
