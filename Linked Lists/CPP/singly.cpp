@@ -114,7 +114,7 @@ class SinglyLL
 			{
 				InsertFirst(iNum);
 			}
-			else if(iPos == iSize)
+			else if(iPos == iSize + 1)
 			{
 				InsertLast(iNum);
 			}
