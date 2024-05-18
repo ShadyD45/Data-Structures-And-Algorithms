@@ -55,7 +55,7 @@ def partition(input_list: list[int], start: int, end: int) -> int:
     @output:
         index q satisfying @postcondition
     @precondition:
-        1) 0 <= start < end < len(L)
+        1) 0 <= start < end < len(input_list)
     @postcondition:
         1)  Element at input_list[end] should be moved to index q
             between [start, end] and rest of the elements
