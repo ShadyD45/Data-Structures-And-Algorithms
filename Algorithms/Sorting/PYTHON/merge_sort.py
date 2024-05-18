@@ -56,7 +56,7 @@ def merge(input_list: list[int], start: int, q: int, end: int) -> None:
     @output:
         None
     @postcondition:
-        L[start...end] is sorted
+        input_list[start...end] is sorted
     @precondition:
         1) 0 <= start <= q < end < len(input_list)
     """

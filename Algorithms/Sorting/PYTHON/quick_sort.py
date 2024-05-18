@@ -50,21 +50,21 @@ def partition(input_list: list[int], start: int, end: int) -> int:
     """
     @input:
         @input_list: non-empty list of integers
-        @start: integer index in L
-        @end: integer index in L
+        @start: integer index in input_list
+        @end: integer index in input_list
     @output:
         index q satisfying @postcondition
     @precondition:
         1) 0 <= start < end < len(L)
     @postcondition:
-        1)  Element at L[end] should be moved to index q
+        1)  Element at input_list[end] should be moved to index q
             between [start, end] and rest of the elements
             should be re-arranged (permuted) such that
 
-            i) all elements from L[start...q-1] are less than
-            or equal to L[q]
-            ii) all elements from L[q+1...end] are greater
-            than L[q]
+            i) All elements from input_list[start...q-1] are less than
+            or equal to input_list[q]
+            ii) All elements from input_list[q+1...end] are greater
+            than input_list[q]
     """
     pivot = input_list[end]
     i = start - 1
