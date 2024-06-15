@@ -1,9 +1,8 @@
+from sys import exc_info
+
 """
-
 @author: Shubham Dhumal
-
 @goal: To implement and test singly linked list data structure
-
 """
 
 
@@ -32,7 +31,7 @@ class SinglyLinkedList:
         self.head_node.next = new_node
 
     def insert_after(self, existing_data: any, new_data: any) -> bool:
-        if self.is_empty():
+        if self.empty():
             raise IndexError("List is empty")
 
         run = self.head_node
@@ -52,7 +51,7 @@ class SinglyLinkedList:
         return True
 
     def insert_before(self, existing_data: any, new_data: any) -> bool:
-        if self.is_empty():
+        if self.empty():
             return False
 
         run = self.head_node
@@ -72,7 +71,7 @@ class SinglyLinkedList:
         return True
 
     def pop_start(self) -> any:
-        if self.is_empty():
+        if self.empty():
             raise ValueError("List is empty!! Cannot pop start")
 
         data = self.head_node.next.data
@@ -81,7 +80,7 @@ class SinglyLinkedList:
         return data
 
     def pop_end(self) -> any:
-        if self.is_empty():
+        if self.empty():
             raise ValueError("List is empty!! Cannot pop end")
 
         run = self.head_node
@@ -95,13 +94,13 @@ class SinglyLinkedList:
         return data
 
     def remove_start(self) -> None:
-        if self.is_empty():
+        if self.empty():
             raise ValueError("List is empty!! Cannot pop start")
 
         self.head_node.next = self.head_node.next.next
 
     def remove_end(self) -> None:
-        if self.is_empty():
+        if self.empty():
             raise ValueError("List is empty!! Cannot pop end")
 
         run = self.head_node
@@ -120,13 +119,13 @@ class SinglyLinkedList:
         run.next = run.next.next
 
     def get_start(self) -> any:
-        if self.is_empty():
+        if self.empty():
             raise ValueError("List is empty!! Cannot get start")
 
         return self.head_node.next.data
 
     def get_end(self) -> any:
-        if self.is_empty():
+        if self.empty():
             raise ValueError("List is empty!! Cannot get end")
 
         run = self.head_node
@@ -136,10 +135,7 @@ class SinglyLinkedList:
 
         return run.data
 
-    def is_empty(self) -> bool:
-        return self.head_node.next is None
-
-    def get_length(self) -> int:
+    def length(self) -> int:
         count = 0
         run = self.head_node.next
 
@@ -149,8 +145,18 @@ class SinglyLinkedList:
 
         return count
 
+    def find(self, f_data):
+        run = self.head_node.next
+        while run is not None:
+            if run.data == f_data:
+                break
+            run = run.next
+        else:
+            return False
+        return True
+
     def show(self, msg: str = ''):
-        if self.is_empty():
+        if self.empty():
             print("List is empty")
             return
 
@@ -165,42 +171,249 @@ class SinglyLinkedList:
             i = i + 1
 
         print("[END]", end=' ')
-        print("\nLength: ", self.get_length())
+        print("\nLength: ", self.length())
         print("------------------------")
+
+    def empty(self):
+        return self.head_node.next is None
+
+    def __add__(self, other):
+        new_list = SinglyLinkedList()
+        run = self.head_node.next
+
+        while run is not None:
+            new_list.insert_end(run.data)
+            run = run.next
+
+        run = other.head_node.next
+
+        while run is not None:
+            new_list.insert_end(run.data)
+            run = run.next
+
+        return new_list
+
+    def append(self, other):
+        # if L2 is empty, then there id nothing to do
+        if other.empty():
+            del other.head_node
+            return None
+
+        # if L2 is not empty then find out the last
+        # node of L1. If L1 is empty the last node
+        # is head_node otherwise last node contaianing
+        # data object is the last node
+        run = self.head_node
+
+        while run.next is not None:
+            run = run.next
+
+        # attach first node with data in L2
+        # with the last node in L1
+        run.next = other.head_node.next
+        del other.head_node
+
+    def merge(self, other):
+        sorted_list = SinglyLinkedList()
+        run_l1 = self.head_node.next
+        run_l2 = other.head_node.next
+
+        while run_l1 is not None and run_l2 is not None:
+            if run_l1.data == run_l2.data:
+                sorted_list.insert_end(run_l1.data)
+                sorted_list.insert_end(run_l2.data)
+                run_l1 = run_l1.next
+                run_l2 = run_l2.next
+            elif run_l1.data < run_l2.data:
+                sorted_list.insert_end(run_l1.data)
+                run_l1 = run_l1.next
+            else:
+                sorted_list.insert_end(run_l2.data)
+                run_l2 = run_l2.next
+
+        # If anything remaining in one of the list just insert at the end of sorted list
+        while run_l1 is not None:
+            sorted_list.insert_end(run_l1.data)
+            run_l1 = run_l1.next
+
+        while run_l2 is not None:
+            sorted_list.insert_end(run_l2.data)
+            run_l2 = run_l2.next
+
+        return sorted_list
+
+    def get_reversed_list(self):
+        new_list = SinglyLinkedList()
+        run = self.head_node.next
+        while run is not None:
+            new_list.insert_start(run.data)
+            run = run.next
+        return new_list
+
+    def reverse(self):
+        if self.head_node.next is None or self.head_node.next.next is None:
+            return None
+
+        # 10 -> 20 -> 30 -> 40
+        # 20 -> 10 -> 30 -> 40
+        # 30 -> 20 -> 10 -> 40
+        # 40 -> 30 -> 20 -> 10
+
+        original_first = self.head_node.next
+        run = self.head_node.next.next
+
+        while run is not None:
+            run_next = run.next
+            run.next = self.head_node.next
+            self.head_node.next = run
+            run = run_next
+
+        original_first.next = None
 
 
 def main():
     L = SinglyLinkedList()
 
-    L.insert_end(100)
-    L.insert_end(200)
-    L.insert_end(300)
-    L.insert_end(400)
+    L.show()  # [START]->[END]
 
-    L.show("After insert_end")
+    L.insert_end(10)
+    L.insert_end(20)
+    L.insert_end(30)
+    L.insert_end(40)
 
-    L.insert_after(100, 20)
+    L.show("After insert_end()")  # [START]->[10]->[20]->[30]->[40]->[END]
 
-    L.show("After insert_after")
+    L.insert_start(100)
+    L.insert_start(200)
+    L.insert_start(300)
 
-    L.insert_before(100, 30)
+    L.show("After isnert_start():")  # [START]->[300]->[200]->[100]->[10]->[20]->[30]->[40]->[END]
 
-    L.show("After insert_before")
+    L.insert_after(100, 500)
+    L.insert_after(40, 50)
 
-    data = L.pop_start()
-    print(f'start: {data}')
-    L.show("After pop_start")
+    L.show("After insert_after():")
 
-    data = L.pop_end()
-    print(f'end: {data}')
-    L.show("After pop_end")
+    try:
+        L.insert_after(-450, 1000)
+    except:
+        exc_name, exc_data, _ = exc_info()
+        print(exc_name, exc_data)
 
-    L.insert_end(222)
-    L.insert_end(300)
+    L.insert_before(50, 368)
+    L.insert_before(100, 491)
 
-    print(f'get_start(): {L.get_start()}')
+    L.show("After insert_before():")
 
-    print(f'get_end(): {L.get_end()}')
+    try:
+        L.insert_before(-450, 1000)
+    except:
+        exc_name, exc_data, _ = exc_info()
+        print(exc_name, exc_data)
+
+    try:
+        data = L.get_start()  # SinglyLinkedList.get_start(L)
+    except:
+        exc_name, exc_data, _ = exc_info()
+        print(exc_name, exc_data)
+
+    print(f'start_data:{data}')
+    L.show("after get_start()")
+
+    try:
+        data = L.get_end()  # SinglyLinkedList.get_end(L)
+    except:
+        exc_name, exc_data, _ = exc_info()
+        print(exc_name, exc_data)
+
+    print(f'end_data:{data}')
+    L.show("after get_end()")
+
+    try:
+        data = L.pop_start()  # SinglyLinkedList.pop_start(L)
+    except:
+        exc_name, exc_data, _ = exc_info()
+        print(exc_name, exc_data)
+
+    print(f'start_data:{data}')
+    L.show('after pop_start()')
+
+    try:
+        data = L.pop_end()  # SinglyLinkedList.pop_end(L)
+    except:
+        exc_name, exc_data, _ = exc_info()
+        print(exc_name, exc_data)
+    print(f'end_data:{data}')
+    L.show('after pop_end()')
+
+    try:
+        data = L.remove_start()
+    except:
+        exc_name, exc_data, _ = exc_info()
+        print(exc_name, exc_data)
+
+    L.show('after remove_start()')
+
+    try:
+        data = L.remove_end()
+    except:
+        exc_name, exc_data, _ = exc_info()
+        print(exc_name, exc_data)
+
+    L.show('after remove_end()')
+
+    try:
+        data = L.remove_data(10)
+    except:
+        exc_name, exc_data, _ = exc_info()
+        print(exc_name, exc_data)
+
+    L.show('after remove_data()')
+
+    n = L.length()
+    print(f"length(L)=={n}")
+
+    ret = L.find(500)
+    if ret == True:
+        print(f'500 is present in list')
+
+    ret = L.find(-1)
+    if ret == False:
+        print("-1 is not present in list")
+
+    L1 = SinglyLinkedList()
+    L2 = SinglyLinkedList()
+
+    for i in range(5):
+        L1.insert_end(i * 5)
+        L2.insert_end(i * 10)
+
+    L3 = L1 + L2
+    L1.show("L1: ")
+    L2.show("L2: ")
+    L3.show("L1 + L2 = L3: ")
+
+    L1.append(L2)
+    del L2
+    L1.show("L1: ")
+
+    print("************** MERGE LIST TEST *****************")
+    L4 = SinglyLinkedList()
+    L5 = SinglyLinkedList()
+
+    for i in range(5):
+        L4.insert_end(i * 5 - 2)
+
+    for i in range(7):
+        L5.insert_end(i * 10 - 5)
+
+    L4.show("L4: ")
+    L5.show("L5: ")
+    L6 = L4.merge(L5)
+    L6.show("L6: ")
+
+    L6.reverse()
+    L6.show(f"L6 reverse: ")
 
 
 if __name__ == '__main__':

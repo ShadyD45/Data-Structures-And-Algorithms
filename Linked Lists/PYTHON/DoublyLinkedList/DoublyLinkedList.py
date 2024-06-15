@@ -113,7 +113,7 @@ class DoublyLinkedList:
         return data
 
     def remove_start(self):
-        if self.is_empty():
+        if self.empty():
             raise ValueError("List is empty")
 
         r_node = self.head_node.next
@@ -124,7 +124,7 @@ class DoublyLinkedList:
         del r_node
 
     def remove_end(self):
-        if self.is_empty():
+        if self.empty():
             raise ValueError("List is empty")
         run = self.head_node
         while run is not None:
@@ -156,7 +156,7 @@ class DoublyLinkedList:
             return False
         return True
 
-    def is_empty(self) -> bool:
+    def empty(self) -> bool:
         return self.head_node.next is None and self.head_node.prev is None
 
     def length(self) -> int:
@@ -185,6 +185,79 @@ class DoublyLinkedList:
             i = i + 1
 
         print("[END]")
+
+    def __add__(self, other):
+        new_list = DoublyLinkedList()
+        run = self.head_node.next
+
+        while run is not None:
+            new_list.insert_end(run.data)
+            run = run.next
+
+        run = other.head_node.next
+
+        while run is not None:
+            new_list.insert_end(run.data)
+            run = run.next
+
+        return new_list
+
+    def append(self, other):
+        # if L2 is empty, then there id nothing to do
+        if other.empty():
+            del other.head_node
+            return None
+
+        # if L2 is not empty then find out the last
+        # node of L1. If L1 is empty the last node
+        # is head_node otherwise last node contaianing
+        # data object is the last node
+        run = self.head_node
+
+        while run.next is not None:
+            run = run.next
+
+        # attach first node with data in L2
+        # with the last node in L1
+        run.next = other.head_node.next
+        del other.head_node
+
+    def merge(self, other):
+        sorted_list = DoublyLinkedList()
+        run_l1 = self.head_node.next
+        run_l2 = other.head_node.next
+
+        while run_l1 is not None and run_l2 is not None:
+            if run_l1.data == run_l2.data:
+                sorted_list.insert_end(run_l1.data)
+                sorted_list.insert_end(run_l2.data)
+                run_l1 = run_l1.next
+                run_l2 = run_l2.next
+            elif run_l1.data < run_l2.data:
+                sorted_list.insert_end(run_l1.data)
+                run_l1 = run_l1.next
+            else:
+                sorted_list.insert_end(run_l2.data)
+                run_l2 = run_l2.next
+
+        # If anything remaining in one of the list just insert at the end of sorted list
+        while run_l1 is not None:
+            sorted_list.insert_end(run_l1.data)
+            run_l1 = run_l1.next
+
+        while run_l2 is not None:
+            sorted_list.insert_end(run_l2.data)
+            run_l2 = run_l2.next
+
+        return sorted_list
+
+    def get_reversed_list(self):
+        new_list = DoublyLinkedList()
+        run = self.head_node.next
+        while run is not None:
+            new_list.insert_start(run.data)
+            run = run.next
+        return new_list
 
 
 def main():
@@ -290,18 +363,43 @@ def main():
     print(f"length(L)=={n}")
 
     ret = L.find(500)
-    if ret:
+    if ret == True:
         print(f'500 is present in list')
 
     ret = L.find(-1)
     if ret == False:
         print("-1 is not present in list")
 
-    """
-    linked list empty == no node with data == (self.head_node.next == None)
-    linked list not empty == at least one node with data == 
-    (self.head_node.next == first node with data)
-    """
+    L1 = DoublyLinkedList()
+    L2 = DoublyLinkedList()
+
+    for i in range(5):
+        L1.insert_end(i * 5)
+        L2.insert_end(i * 10)
+
+    L3 = L1 + L2
+    L1.show("L1: ")
+    L2.show("L2: ")
+    L3.show("L1 + L2 = L3: ")
+
+    L1.append(L2)
+    del L2
+    L1.show("L1: ")
+
+    print("************** MERGE LIST TEST *****************")
+    L4 = DoublyLinkedList()
+    L5 = DoublyLinkedList()
+
+    for i in range(5):
+        L4.insert_end(i * 5 - 2)
+
+    for i in range(7):
+        L5.insert_end(i * 10 - 5)
+
+    L4.show("L4: ")
+    L5.show("L5: ")
+    L6 = L4.merge(L5)
+    L6.show("L6: ")
 
 
 if __name__ == '__main__':
