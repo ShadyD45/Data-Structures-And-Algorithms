@@ -218,6 +218,22 @@ class SinglyCircularLinkedList:
 
         return sorted_list
 
+    def reverse(self):
+        if self.is_empty() or self.head_node.next.next is None:
+            return None
+
+        original_first = self.head_node.next
+        run = self.head_node.next.next
+
+        while run is not self.head_node:
+            # Keep a reference of the next node
+            run_next = run.next
+            run.next = self.head_node.next
+            self.head_node.next = run
+            run = run_next
+
+        original_first.next = self.head_node
+
 
 def main():
     L = SinglyCircularLinkedList()
@@ -235,7 +251,7 @@ def main():
     L.insert_start(200)
     L.insert_start(300)
 
-    L.show("After isnert_start():")
+    L.show("After insert_start():")
 
     L.insert_after(100, 500)
     L.insert_after(40, 50)
@@ -358,7 +374,9 @@ def main():
     L6 = L4.merge(L5)
     L6.show("L6: ")
 
+    L6.reverse()
+    L6.show(f"L6 reverse in place: ")
+
 
 if __name__ == '__main__':
     main()
-

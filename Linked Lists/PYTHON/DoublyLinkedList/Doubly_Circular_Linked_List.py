@@ -201,6 +201,37 @@ class List:
 
         return sorted_list
 
+    def reverse(self):
+        # List is empty or has less than 2 elements then do nothing
+        if self.empty() or self.head_node.next.next is self.head_node:
+            return None
+        # [HEAD] <-> 10 <-> 20 <-> 30 <-> 40
+        # [HEAD] <-> 20 <-> 10 <-> 30 <-> 40
+        # [HEAD] <-> 30 <-> 20 <-> 10 <-> 40
+        # [HEAD] <-> 40 <-> 30 <-> 20 <-> 10
+
+        original_first = self.head_node.next
+        run = self.head_node.next.next
+
+        # Simple idea behind the solution is,
+        # Iterate over the list and Keep moving
+        # each node in the list to the first position,
+        # This will eventually reverse the list.
+        while run is not self.head_node:
+            # Keep a reference to the next node,
+            # so we can move ahead in the list later
+            run_next = run.next
+            # Then set the links for the run node
+            # such that the node is set at the first position in list.
+            run.prev = self.head_node
+            run.next = self.head_node.next
+            self.head_node.next.prev = run
+            self.head_node.next = run
+            # Move to next node in list
+            run = run_next
+
+        original_first.next = self.head_node
+        self.head_node.prev = original_first
 
 def main():
     print("UNIT TESTING START:")
@@ -342,8 +373,43 @@ def main():
     print(f"L4: {L4}")
     print(f"L5: {L5}")
 
-    L6 = L4.merge(L5)
+    L6 = L4 + L5
     print(f"L5: {L6}")
+
+    L7 = List()
+    print(f"L7: {L7}")
+
+    for i in range(7):
+        L7.insert_end(i * 10)
+
+    L7.reverse()
+    print(f"In place Reversed L7: {L7}")
+
+    # Just test operations after reversing list inplace
+    try:
+        data = L7.pop_start()
+    except:
+        exc_name, exc_data, _ = exc_info()
+        print(exc_name, exc_data)
+
+    print(f'start_data:{data}')
+    print(f'after pop_start() {L7}')
+
+    try:
+        data = L7.pop_end()
+    except:
+        exc_name, exc_data, _ = exc_info()
+        print(exc_name, exc_data)
+    print(f'end_data:{data}')
+    print(f'after pop_end() {L7}')
+
+    try:
+        data = L7.remove_data(20)
+    except:
+        exc_name, exc_data, _ = exc_info()
+        print(exc_name, exc_data)
+
+    print(f'after remove_data() {L7}')
 
     print("END OF UNIT TESTING")
 

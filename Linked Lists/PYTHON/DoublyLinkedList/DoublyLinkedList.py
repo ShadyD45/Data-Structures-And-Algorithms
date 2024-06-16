@@ -180,7 +180,7 @@ class DoublyLinkedList:
         run = self.head_node.next
 
         while run is not None:
-            print(f'L[{i}]:[{run.data}] <-> ', end='')
+            print(f'[{run.data}] <-> ', end='')
             run = run.next
             i = i + 1
 
@@ -258,6 +258,38 @@ class DoublyLinkedList:
             new_list.insert_start(run.data)
             run = run.next
         return new_list
+
+    def reverse(self):
+        # List is empty or has less than 2 elements then do nothing
+        if self.empty() or self.head_node.next.next is None:
+            return None
+        # [HEAD] <-> 10 <-> 20 <-> 30 <-> 40
+        # [HEAD] <-> 20 <-> 10 <-> 30 <-> 40
+        # [HEAD] <-> 30 <-> 20 <-> 10 <-> 40
+        # [HEAD] <-> 40 <-> 30 <-> 20 <-> 10
+
+        original_first = self.head_node.next
+        run = self.head_node.next.next
+
+        # Simple idea behind the solution is,
+        # Iterate over the list and Keep moving
+        # each node in the list to the first position,
+        # This will eventually reverse the list.
+        while run is not None:
+            # Keep a reference to the next node,
+            # so we can move ahead in the list later
+            run_next = run.next
+            # Then set the links for the run node
+            # such that the node is set at the first position in list.
+            run.prev = self.head_node
+            run.next = self.head_node.next
+            self.head_node.next.prev = run
+            self.head_node.next = run
+            # Move to next node in list
+            run = run_next
+
+        original_first.prev = original_first.next
+        original_first.next = None
 
 
 def main():
@@ -400,6 +432,40 @@ def main():
     L5.show("L5: ")
     L6 = L4.merge(L5)
     L6.show("L6: ")
+
+    L7 = DoublyLinkedList()
+
+    for i in range(7):
+        L7.insert_end(i * 10)
+
+    L7.show("Before reverse L7: ")
+    L7.reverse()
+    L7.show("After reverse L7: ")
+
+    try:
+        data = L7.pop_start()
+    except:
+        exc_name, exc_data, _ = exc_info()
+        print(exc_name, exc_data)
+
+    print(f'start_data:{data}')
+    L7.show('after pop_start()')
+
+    try:
+        data = L7.pop_end()
+    except:
+        exc_name, exc_data, _ = exc_info()
+        print(exc_name, exc_data)
+    print(f'end_data:{data}')
+    L7.show('after pop_end()')
+
+    try:
+        data = L7.remove_data(20)
+    except:
+        exc_name, exc_data, _ = exc_info()
+        print(exc_name, exc_data)
+
+    L7.show('after remove_data()')
 
 
 if __name__ == '__main__':
