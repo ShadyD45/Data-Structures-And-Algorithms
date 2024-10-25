@@ -18,25 +18,39 @@ void main()
 	int iChoice, iItem;
 	while(1)
 	{
+		printf("\n\tOPTIONS\t");
 		printf("\n1) Push\n2) Pop\n3) Display\n4) Peek\n5) Quit");
 		printf("\nWhat do you want to do: ");
 		scanf("%d",&iChoice);
 		
 		switch(iChoice)
 		{
-			case 1:	printf("\nEnter item to push onto the stack: ");
+			case 1:
+				printf("\nEnter item to push onto the stack: ");
 				scanf("%d",&iItem);
 				push(iItem);
 				break;
-			case 2: printf("\n%d Popped from stack",pop());
+			case 2:
+				if(isEmpty())
+				{
+					printf("\nStack underflow!!\n"); //not the best practice, as duplicates the code
+				}
+				else
+				{
+					printf("\n%d Popped from stack\n",pop());
+				}
 				break;
-			case 3: display();
+			case 3:
+				display();
 				break;
-			case 4: peek();
+			case 4:
+				peek();
 				break;
-			case 5: exit(1);
+			case 5:
+				printf("Exiting.\n");
+				exit(1);
 			
-			default: printf("\nWrong Choice!! Pleae enter valid input");				
+			default: printf("\nWrong Choice!! Please enter valid input");				
 		}
 	}
 }
@@ -58,7 +72,6 @@ int pop()
 	if(isEmpty())
 	{
 		printf("\nStack underflow!!");
-		exit(1);
 	}
 	iItem = iarrStack[iTop];
 	iTop -= 1;
@@ -73,7 +86,7 @@ void peek()
 		return;
 	}
 	
-	printf("\nItem at the Top is: %d",iarrStack[iTop]);
+	printf("\nItem at the Top is: %d\n\n",iarrStack[iTop]);
 }
 
 void display()
@@ -86,6 +99,7 @@ void display()
 	}
 	else
 	{
+		printf("\n\tStack elements:\n");
 		for(i = iTop; i >= 0; --i)
 		{
 			printf("\t%d\n",iarrStack[i]);
