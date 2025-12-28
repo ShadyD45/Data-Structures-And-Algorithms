@@ -26,6 +26,22 @@ Instead of just reading theory, I implement the same ideas across different lang
 
 _(I check these off as I actively practice DS & algorithms in each language.)_
 
+## 🧠 Language Progress
+
+<!-- LANG-STATUS-START -->
+
+### 🚧 Currently Learning
+- [x] Go
+
+### 🗓️ Planned / Next Up
+- [ ] Java
+- [ ] Rust
+- [ ] Javascript
+- [ ] Kotlin
+
+<!-- LANG-STATUS-END -->
+
+
 ## 💡 Why This Repo Exists
 
 - To build strong fundamentals
