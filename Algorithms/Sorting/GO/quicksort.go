@@ -49,7 +49,7 @@ func main() {
 	argsWithoutProg := os.Args[1:]
 
 	if len(argsWithoutProg) == 0 {
-		fmt.Println("Usage: go run main.go <array-size>")
+		fmt.Println("Usage: go run quicksort.go <array-size>")
 		os.Exit(1)
 	}
 
