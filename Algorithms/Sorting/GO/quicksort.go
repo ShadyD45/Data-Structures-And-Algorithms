@@ -35,7 +35,7 @@ func quickSort(arr []int) {
 	quickSort(arr[pivot+1:])
 }
 
-func generateRandomInts(size int, min, max int) []int {
+func generateRandomInts(size int, min int, max int) []int {
 	arr := make([]int, size)
 
 	for i := range size {
