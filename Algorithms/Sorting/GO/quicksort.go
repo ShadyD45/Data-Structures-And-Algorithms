@@ -1,28 +1,21 @@
 package main
 
-import (
-	"fmt"
-	"math/rand"
-	"os"
-	"strconv"
-)
-
-func partition(inputList []int, start int, end int) int {
-	pivot := inputList[end]
+func partition(inputArr []int, start int, end int) int {
+	pivot := inputArr[end] // Select last element as pivot
 	i := start - 1
 	j := start
 
 	for j < end {
-		if inputList[j] <= pivot {
+		if inputArr[j] <= pivot {
 			i++
-			inputList[i], inputList[j] = inputList[j], inputList[i]
+			inputArr[i], inputArr[j] = inputArr[j], inputArr[i]
 		}
 		j++
 	}
 
-	inputList[end], inputList[i+1] = inputList[i+1], inputList[end]
+	inputArr[end], inputArr[i+1] = inputArr[i+1], inputArr[end]
 
-	return i + 1
+	return i + 1 // Return the position of pivot
 }
 
 func quickSort(arr []int) {
@@ -33,41 +26,4 @@ func quickSort(arr []int) {
 	pivot := partition(arr, 0, len(arr)-1)
 	quickSort(arr[:pivot])
 	quickSort(arr[pivot+1:])
-}
-
-func generateRandomInts(size int, min int, max int) []int {
-	arr := make([]int, size)
-
-	for i := range size {
-		arr[i] = rand.Intn(max-min+1) + min
-	}
-
-	return arr
-}
-
-func main() {
-	argsWithoutProg := os.Args[1:]
-
-	if len(argsWithoutProg) == 0 {
-		fmt.Println("Usage: go run quicksort.go <array-size>")
-		os.Exit(1)
-	}
-
-	inputSize, err := strconv.Atoi(argsWithoutProg[0])
-
-	if err != nil {
-		fmt.Println("Invalid input size: ", err)
-		os.Exit(1)
-	}
-
-	arr := generateRandomInts(inputSize, 1, 1000)
-
-	fmt.Printf("Input array size: %d\n", inputSize)
-	fmt.Println("Input array before sort: ", arr)
-
-	// Sort
-	quickSort(arr)
-
-	fmt.Printf("Input array size: %d \n", inputSize)
-	fmt.Println("Input array after sort: ", arr)
 }
