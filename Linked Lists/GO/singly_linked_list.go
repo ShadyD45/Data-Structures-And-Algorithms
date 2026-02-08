@@ -11,6 +11,7 @@ type Node struct {
 
 type SinglyLinkedList struct {
 	head *Node
+	size int
 }
 
 func newNode(data int, next *Node) *Node {
@@ -27,10 +28,12 @@ func newList() *SinglyLinkedList {
 func (ll *SinglyLinkedList) insert_start(data int) {
 	node := newNode(data, ll.head.next)
 	ll.head.next = node
+	// increase size
+	ll.size++
 }
 
 func (ll *SinglyLinkedList) isEmpty() bool {
-	if ll.head.next == nil {
+	if ll.size == 0 {
 		return true
 	} else {
 		return false
@@ -49,6 +52,9 @@ func (ll *SinglyLinkedList) insert_end(data int) {
 	}
 
 	run.next = node
+
+	// increase size
+	ll.size++
 }
 
 func (ll *SinglyLinkedList) search(data int) (*Node, error) {
@@ -77,6 +83,9 @@ func (ll *SinglyLinkedList) insert_after(newData int, data int) (bool, error) {
 	newNode := newNode(newData, node.next)
 	node.next = newNode
 
+	// increase size
+	ll.size++
+
 	return true, nil
 }
 
@@ -97,6 +106,9 @@ func (ll *SinglyLinkedList) insert_before(newData int, data int) (bool, error) {
 
 	node := newNode(newData, run.next)
 	run.next = node
+
+	// increase size
+	ll.size++
 
 	return true, nil
 }
